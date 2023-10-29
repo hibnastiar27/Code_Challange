@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+
 import {
   ScrollView,
   StyleSheet,
@@ -6,7 +7,10 @@ import {
   View,
   Image,
   TextInput,
+  TouchableOpacity,
+  FlatList,
 } from 'react-native';
+
 import {
   SearchNormal1,
   Home,
@@ -14,6 +18,11 @@ import {
   UserSquare,
   AddSquare,
 } from 'iconsax-react-native';
+
+import {TopParticipant} from './src/components';
+
+import {listChallange, levelList} from './data';
+
 import {fontType, colors} from './src/theme';
 
 export default function App() {
@@ -34,7 +43,9 @@ export default function App() {
         </View>
       </View>
 
-      <LevelCategory />
+      <View style={category.listCategory}>
+        <LevelCategory />
+      </View>
 
       <ScrollView>
         <MostParticipant />
@@ -46,61 +57,52 @@ export default function App() {
   );
 }
 
-const LevelCategory = () => {
+const ItemLevel = ({item, onPress, color, backgroundColor, fontWeight}) => {
   return (
-    <View style={category.listCategory}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={{...category.item1, marginLeft: 24}}>
-          <Text style={{...category.title, fontWeight: 'bold'}}>All</Text>
-        </View>
-        <View style={category.item}>
-          <Text style={category.title}>Beginer</Text>
-        </View>
-        <View style={category.item}>
-          <Text style={category.title}>Easy</Text>
-        </View>
-        <View style={category.item}>
-          <Text style={category.title}>Intermadiate</Text>
-        </View>
-        <View style={category.item}>
-          <Text style={category.title}>Advance</Text>
-        </View>
-        <View style={{...category.item, marginRight: 24}}>
-          <Text style={category.title}>Expert</Text>
-        </View>
-      </ScrollView>
-    </View>
+    <TouchableOpacity onPress={onPress}>
+      <View style={{...category.item, backgroundColor}}>
+        <Text style={{...category.title, color, fontWeight}}>
+          {item.categoryName}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const LevelCategory = () => {
+  const [selected, setSelected] = useState(1);
+
+  const renderItem = ({item}) => {
+    const colorText = item.id === selected ? colors.black() : colors.grey(0.5);
+    const colorBg = item.id === selected ? colors.green(0.5) : colors.white();
+    const fontWeight = item.id === selected ? 'bold' : 'normal';
+    return (
+      <ItemLevel
+        item={item}
+        onPress={() => setSelected(item.id)}
+        color={colorText}
+        backgroundColor={colorBg}
+        fontWeight={fontWeight}
+      />
+    );
+  };
+
+  return (
+    <FlatList
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      data={levelList}
+      keyExtractor={item => item.id}
+      renderItem={item => renderItem({...item})}
+      contentContainerStyle={{paddingHorizontal: 20}}
+    />
   );
 };
 
 const MostParticipant = () => {
-  return (
-    <View style={Most.container}>
-      <Text style={Most.h1}>Most Participant</Text>
-
-      <View style={Most.card}>
-        <View>
-          <Image
-            style={Most.image}
-            source={{
-              uri: 'https://codedesign.dev/_next/image?url=%2Ftwitter-embed.png&w=1920&q=75',
-            }}
-          />
-        </View>
-
-        <View style={Most.row}>
-          <View>
-            <Text style={Most.h2}>Twitter Embed</Text>
-            <View style={Most.row}>
-              <Text style={Most.p}>Jul 25, 2023</Text>
-              <Text style={Most.p}>89 Participant</Text>
-            </View>
-          </View>
-          <Text style={Most.btn}>View Challange</Text>
-        </View>
-      </View>
-    </View>
-  );
+  return listChallange.map(item => (
+    <TopParticipant key={item.id} data={item} />
+  ));
 };
 
 const ListChallange = () => {
@@ -228,14 +230,6 @@ const category = StyleSheet.create({
     borderBottomColor: '#ABFFCD',
     borderBottomWidth: 1,
   },
-  item1: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 25,
-    alignItems: 'center',
-    backgroundColor: '#ABFFCD',
-    marginHorizontal: 5,
-  },
   item: {
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -247,64 +241,6 @@ const category = StyleSheet.create({
     fontFamily: fontType['Pjs-SemiBold'],
     fontSize: 14,
     lineHeight: 18,
-    color: '#1e1e1e',
-  },
-});
-
-const Most = StyleSheet.create({
-  container: {
-    marginHorizontal: 24,
-    marginVertical: 10,
-    borderBottomColor: '#ABFFCD',
-  },
-  h1: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    fontFamily: fontType['Pjs-Bold'],
-    color: colors.black(),
-  },
-  h2: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: fontType['Pjs-Bold'],
-    color: colors.black(),
-    textAlign: 'left',
-  },
-  p: {
-    fontSize: 12,
-    fontFamily: fontType['Pjs-Bold'],
-    color: colors.black(0.5),
-    textAlign: 'left',
-    marginRight: 10,
-  },
-  card: {
-    marginTop: 20,
-    padding: 10,
-    width: 360,
-    backgroundColor: '#FAFFFC',
-    borderRadius: 10,
-  },
-  image: {
-    alignSelf: 'center',
-    width: 340,
-    height: 172.66,
-    borderRadius: 10,
-    resizeMode: 'cover',
-    marginBottom: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  btn: {
-    textAlignVertical: 'center',
-    backgroundColor: '#ABFFCD',
-    paddingHorizontal: 16,
-    paddingVertical: 5,
-    borderRadius: 8,
-    fontFamily: fontType['Pjs-Bold'],
-    fontSize: 12,
-    color: colors.black(),
   },
 });
 
