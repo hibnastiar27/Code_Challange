@@ -1,33 +1,36 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
 import {fontType, colors} from '../theme';
 
 const ParticipantTop = ({data}) => {
   return (
     <View style={Most.container}>
-      <Text style={Most.h1}>Most Participant</Text>
-
-      <View style={Most.card}>
-        <View>
-          <Image
-            style={Most.image}
-            source={{
-              uri: 'https://codedesign.dev/_next/image?url=%2Ftwitter-embed.png&w=1920&q=75',
-            }}
-          />
-        </View>
-
-        <View style={Most.row}>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        contentContainerStyle={{gap: 16}}>
+        <View style={Most.card}>
           <View>
-            <Text style={Most.h2}>{data.title}</Text>
-            <View style={Most.row}>
-              <Text style={Most.p}>{data.date}</Text>
-              <Text style={Most.p}>{data.participant} Participant</Text>
-            </View>
+            <Image
+              style={Most.image}
+              source={{
+                uri: 'https://codedesign.dev/_next/image?url=%2Ftwitter-embed.png&w=1920&q=75',
+              }}
+            />
           </View>
-          <Text style={Most.btn}>View Challange</Text>
+
+          <View style={Most.row}>
+            <View>
+              <Text style={Most.h2}>{data.title}</Text>
+              <View style={Most.row}>
+                <Text style={Most.p}>{data.date}</Text>
+                <Text style={Most.p}>{data.participant} Participant</Text>
+              </View>
+            </View>
+            <Text style={Most.btn}>View Challange</Text>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -37,14 +40,7 @@ export default ParticipantTop;
 const Most = StyleSheet.create({
   container: {
     marginHorizontal: 24,
-    marginVertical: 10,
     borderBottomColor: '#ABFFCD',
-  },
-  h1: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    fontFamily: fontType['Pjs-Bold'],
-    color: colors.black(),
   },
   h2: {
     fontSize: 14,
@@ -61,7 +57,7 @@ const Most = StyleSheet.create({
     marginRight: 10,
   },
   card: {
-    marginTop: 20,
+    marginBottom: 10,
     padding: 10,
     width: 360,
     backgroundColor: '#FAFFFC',
