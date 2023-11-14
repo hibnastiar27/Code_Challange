@@ -10,8 +10,13 @@ import {
   FlatList,
 } from 'react-native';
 
-import {TopParticipant, Navbar, SearchBar} from '../../components';
-import {listChallange, levelList} from '../../../data';
+import {
+  TopParticipant,
+  Navbar,
+  SearchBar,
+  VerticalList,
+} from '../../components';
+import {ListChallange, levelList} from '../../../data';
 import {fontType, colors} from '../../../src/theme';
 
 export default function Beranda() {
@@ -30,13 +35,25 @@ export default function Beranda() {
       <ScrollView>
         <Text style={styles.h1}>Most Participant</Text>
         <MostParticipant />
-        <ListChallange />
+        {/* <ListChallange /> */}
+        <ListVertical />
       </ScrollView>
 
-      <Navbar />
+      {/* <Navbar /> */}
     </View>
   );
 }
+
+const ListVertical = () => {
+  const Dt = ListChallange.slice(1, ListChallange.length);
+  return (
+    <View style={styles.header}>
+      {Dt.map((item, index) => (
+        <VerticalList item={item} key={index} />
+      ))}
+    </View>
+  );
+};
 
 const ItemLevel = ({item, onPress, color, backgroundColor, fontWeight}) => {
   return (
@@ -81,56 +98,7 @@ const LevelCategory = () => {
 };
 
 const MostParticipant = () => {
-  return <TopParticipant data={listChallange[0]} />;
-};
-
-const ListChallange = () => {
-  return (
-    <View style={List.container}>
-      <Text style={List.h1}>All</Text>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        contentContainerStyle={{gap: 16}}>
-        <View style={List.card}>
-          <View>
-            <Image
-              style={List.image}
-              source={{
-                uri: 'https://codedesign.dev/_next/image?url=%2Fholadok.png&w=1920&q=75',
-              }}
-            />
-          </View>
-
-          <View style={List.row}>
-            <View>
-              <Text style={List.h2}>Holadok</Text>
-              <Text style={List.p}>Jul 27, 2023</Text>
-              <Text style={List.p}>16 Participant</Text>
-            </View>
-          </View>
-        </View>
-        <View style={List.card}>
-          <View>
-            <Image
-              style={List.image}
-              source={{
-                uri: 'https://codedesign.dev/_next/image?url=%2Fal-nasr.png&w=1920&q=75',
-              }}
-            />
-          </View>
-
-          <View style={List.row}>
-            <View>
-              <Text style={List.h2}>Al Nasr</Text>
-              <Text style={List.p}>Feb 25, 2023</Text>
-              <Text style={List.p}>24 Participant</Text>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </View>
-  );
+  return <TopParticipant data={ListChallange[0]} />;
 };
 
 const styles = StyleSheet.create({

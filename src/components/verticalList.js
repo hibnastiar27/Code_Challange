@@ -1,11 +1,15 @@
 import React from 'react';
 
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {fontType, colors} from '../theme';
+import {useNavigation} from '@react-navigation/native';
 
 const VerticalList = ({item}) => {
+  const navigation = useNavigation();
   return (
-    <View style={styles.row}>
+    <TouchableOpacity
+      style={styles.row}
+      onPress={() => navigation.navigate('Details', {blogId: item.id})}>
       <View style={styles.flex}>
         <Image
           style={styles.image}
@@ -22,7 +26,7 @@ const VerticalList = ({item}) => {
       <Text style={styles.txtBox} backgroundColor={colors.green(0.1)}>
         {item.status}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

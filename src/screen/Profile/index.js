@@ -26,7 +26,7 @@ export default function Profile() {
         </View>
       </ScrollView>
 
-      <Navbar />
+      {/* <Navbar /> */}
     </View>
   );
 }

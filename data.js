@@ -25,7 +25,26 @@ export const levelList = [
   },
 ];
 
-export const listChallange = [
+export const dataNavbar = [
+  {
+    id: 1,
+    categoryName: 'Beranda',
+  },
+  {
+    id: 2,
+    categoryName: 'History',
+  },
+  {
+    id: 3,
+    categoryName: 'Add',
+  },
+  {
+    id: 4,
+    categoryName: 'Profile',
+  },
+];
+
+export const ListChallange = [
   {
     id: 1,
     title: 'Twitter Embed',

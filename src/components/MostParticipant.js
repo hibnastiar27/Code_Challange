@@ -1,20 +1,32 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {fontType, colors} from '../theme';
+import {useNavigation} from '@react-navigation/native';
 
 const ParticipantTop = ({data}) => {
+  const navigation = useNavigation();
   return (
     <View style={Most.container}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal
         contentContainerStyle={{gap: 16}}>
-        <View style={Most.card}>
+        <TouchableOpacity
+          style={Most.card}
+          onPress={() => navigation.navigate('Details', {blogId: data.id})}>
           <View>
             <Image
               style={Most.image}
               source={{
-                uri: 'https://codedesign.dev/_next/image?url=%2Ftwitter-embed.png&w=1920&q=75',
+                // uri: 'https://codedesign.dev/_next/image?url=%2Ftwitter-embed.png&w=1920&q=75',
+                uri: data.image,
               }}
             />
           </View>
@@ -29,7 +41,7 @@ const ParticipantTop = ({data}) => {
             </View>
             <Text style={Most.btn}>View Challange</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

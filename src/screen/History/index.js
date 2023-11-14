@@ -1,7 +1,7 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 
 import {Navbar, SearchBar, VerticalList} from '../../components';
-import {listChallange} from '../../../data';
+import {ListChallange} from '../../../data';
 import {colors} from '../../../src/theme';
 
 export default function History() {
@@ -13,13 +13,13 @@ export default function History() {
         <ListVertical />
       </ScrollView>
 
-      <Navbar />
+      {/* <Navbar /> */}
     </View>
   );
 }
 
 const ListVertical = () => {
-  const Dt = listChallange.slice(0, listChallange.length);
+  const Dt = ListChallange.slice(0, ListChallange.length);
   return (
     <View style={styles.header}>
       {Dt.map((item, index) => (
