@@ -77,6 +77,61 @@ export const ListChallange = [
       'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
     status: '8/10',
   },
+  {
+    id: 4,
+    title: 'Construction',
+    date: 'Feb 27, 2023',
+    participant: 10,
+    image:
+      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+    deskripsi:
+      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+    status: '8/10',
+  },
+  {
+    id: 5,
+    title: 'Construction',
+    date: 'Feb 27, 2023',
+    participant: 10,
+    image:
+      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+    deskripsi:
+      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+    status: '8/10',
+  },
+  {
+    id: 6,
+    title: 'Construction',
+    date: 'Feb 27, 2023',
+    participant: 10,
+    image:
+      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+    deskripsi:
+      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+    status: '8/10',
+  },
+  {
+    id: 7,
+    title: 'Construction',
+    date: 'Feb 27, 2023',
+    participant: 10,
+    image:
+      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+    deskripsi:
+      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+    status: '8/10',
+  },
+  {
+    id: 8,
+    title: 'Construction',
+    date: 'Feb 27, 2023',
+    participant: 10,
+    image:
+      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+    deskripsi:
+      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+    status: '8/10',
+  },
 ];
 
 export const listProfile = {

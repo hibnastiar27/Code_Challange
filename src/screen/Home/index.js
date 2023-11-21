@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 
 import {
   ScrollView,
@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Animated,
 } from 'react-native';
 
 import {
@@ -20,25 +21,38 @@ import {ListChallange, levelList} from '../../../data';
 import {fontType, colors} from '../../../src/theme';
 
 export default function Beranda() {
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const diffClampY = Animated.diffClamp(scrollY, 0, 142);
+  const recentY = diffClampY.interpolate({
+    inputRange: [0, 142],
+    outputRange: [0, -142],
+    extrapolate: 'clamp',
+  });
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>CODE CHALLANGE.</Text>
-      </View>
+      <Animated.View
+        style={[styles.container2, {transform: [{translateY: recentY}]}]}>
+        <View style={styles.header}>
+          <Text style={styles.title}>CODE CHALLANGE.</Text>
+        </View>
+        <SearchBar />
+        <View style={category.listCategory}>
+          <LevelCategory />
+        </View>
+      </Animated.View>
 
-      <SearchBar />
-
-      <View style={category.listCategory}>
-        <LevelCategory />
-      </View>
-
-      <ScrollView>
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: true},
+        )}
+        contentContainerStyle={{paddingTop: 142}}>
         <Text style={styles.h1}>Most Participant</Text>
         <MostParticipant />
         {/* <ListChallange /> */}
         <ListVertical />
-      </ScrollView>
-
+      </Animated.ScrollView>
       {/* <Navbar /> */}
     </View>
   );
@@ -102,6 +116,14 @@ const MostParticipant = () => {
 };
 
 const styles = StyleSheet.create({
+  container2: {
+    position: 'absolute',
+    backgroundColor: colors.white(),
+    zIndex: 999,
+    left: 0,
+    right: 0,
+    elevation: 1000,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.white(),
