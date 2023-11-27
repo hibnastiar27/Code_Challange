@@ -79,57 +79,33 @@ export const ListChallange = [
   },
   {
     id: 4,
-    title: 'Construction',
+    title: 'Al Nasr',
     date: 'Feb 27, 2023',
-    participant: 10,
-    image:
-      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+    participant: 14,
+    image: 'https://codedesign.dev/_next/image?url=%2Fal-nasr.png&w=1200&q=75',
     deskripsi:
-      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+      'A beautifully designed website for al hajj and umrah travel agency. This design features a stunning hero section with an eye-catching image, services, packages, airways accomadation, facilities, testimonials, and gallery. This design is perfect for any travel agency looking to attract new customers and take their business to new heights!',
     status: '8/10',
   },
   {
     id: 5,
-    title: 'Construction',
+    title: 'DressLy',
     date: 'Feb 27, 2023',
     participant: 10,
-    image:
-      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+    image: 'https://codedesign.dev/_next/image?url=%2Fdressly.png&w=1200&q=75',
     deskripsi:
-      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+      'Introducing our latest fashion landing website design! This captivating design includes a stunning hero section with an eye-catching image, a partner section featuring prestigious brands, a carefully curated top selection section, a showcase of our best-selling items, an easy-to-follow "How to Order" section, and a newsletter sign-up to stay updated with the latest trends and exclusive offers.',
     status: '8/10',
   },
   {
     id: 6,
-    title: 'Construction',
-    date: 'Feb 27, 2023',
+    title: 'Team Collaboration',
+    date: 'Feb 26, 2023',
     participant: 10,
     image:
-      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
+      'https://codedesign.dev/_next/image?url=%2Fteam-collaboration.png&w=1200&q=75',
     deskripsi:
-      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
-    status: '8/10',
-  },
-  {
-    id: 7,
-    title: 'Construction',
-    date: 'Feb 27, 2023',
-    participant: 10,
-    image:
-      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
-    deskripsi:
-      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
-    status: '8/10',
-  },
-  {
-    id: 8,
-    title: 'Construction',
-    date: 'Feb 27, 2023',
-    participant: 10,
-    image:
-      'https://codedesign.dev/_next/image?url=%2Fconstruction.png&w=1200&q=75',
-    deskripsi:
-      'The Holadok Hero component is a visually striking and highly functional element of a doctor appointment website. It features a clean and modern design, with a left side that includes a headline, subheadline, and a single call-to-action button inviting users to make an appointment.',
+      'Take your team collaboration platform to new heights with a cutting-edge UI design that features a stunning hero section with an eye-catching illustration, along with sections on clients, capabilities, features, integrations, customer support, testimonials, and email subscriptions.',
     status: '8/10',
   },
 ];

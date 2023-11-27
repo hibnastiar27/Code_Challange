@@ -1,8 +1,14 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Beranda, History, Profile, Details} from '../screen';
-import {Home, Activity, UserSquare, AddSquare} from 'iconsax-react-native';
+import {Beranda, History, Profile, Details, Search, EditPage} from '../screen';
+import {
+  Home,
+  Activity,
+  UserSquare,
+  AddSquare,
+  Edit,
+} from 'iconsax-react-native';
 import {fontType, colors} from '../theme';
 
 const Tab = createBottomTabNavigator();
@@ -83,9 +89,30 @@ const Router = () => {
         component={MainApp}
         options={{headerShown: false}}
       />
+
       <Stack.Screen
         name="Details"
         component={Details}
+        options={{
+          headerShown: false,
+          animationEnabled: true,
+          animationTypeForReplace: 'pop',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
+      <Stack.Screen
+        name="SearchPage"
+        component={Search}
+        options={{
+          headerShown: false,
+          presentation: 'transparentModal',
+        }}
+      />
+      <Stack.Screen
+        name="EditPage"
+        component={EditPage}
         options={{
           headerShown: false,
           animationEnabled: true,

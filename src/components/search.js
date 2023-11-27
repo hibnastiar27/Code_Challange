@@ -1,20 +1,25 @@
 import {SearchNormal1} from 'iconsax-react-native';
 import React from 'react';
-import {StyleSheet, View, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableWithoutFeedback,
+  Text,
+} from 'react-native';
 import {colors} from '../theme';
+import {useNavigation} from '@react-navigation/native';
 
 const SearchBar = () => {
+  const navigation = useNavigation();
   return (
-    <View style={nav.HSearch}>
-      <TextInput
-        style={nav.input}
-        placeholder="Search"
-        placeholderTextColor={colors.black(0.2)}
-      />
-      <View style={nav.boxIcon}>
-        <SearchNormal1 style={nav.SearchIcon} variant="Linear" />
+    <TouchableWithoutFeedback onPress={() => navigation.navigate('SearchPage')}>
+      <View style={nav.HSearch}>
+        <View style={nav.bar}>
+          <Text style={nav.placeholder}>Search</Text>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -23,21 +28,19 @@ export default SearchBar;
 const nav = StyleSheet.create({
   HSearch: {
     paddingVertical: 16,
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
+    paddingHorizontal: 16,
   },
-  input: {
-    marginLeft: 24,
-    marginVertical: 0,
-    height: 40,
-    margin: 12,
+  bar: {
+    borderColor: colors.grey(0.9),
     borderWidth: 1,
-    borderColor: colors.black(0.2),
     padding: 10,
-    color: colors.black(),
-    borderRadius: 50,
-    width: '70%',
+    borderRadius: 90,
+    flex: 1,
+  },
+  placeholder: {
+    fontSize: 14,
+    color: colors.grey(0.5),
+    lineHeight: 18,
   },
   boxIcon: {
     backgroundColor: '#ABFFCD',

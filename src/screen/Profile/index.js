@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {Navbar} from '../../components';
 import {listProfile} from '../../../data';
 import {colors} from '../../../src/theme';
 import {Edit} from 'iconsax-react-native';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Profile() {
   return (
@@ -32,6 +32,7 @@ export default function Profile() {
 }
 
 const HeaderProfile = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.header}>
       <Image
@@ -40,7 +41,9 @@ const HeaderProfile = () => {
           uri: listProfile.profilePict,
         }}
       />
-      <TouchableOpacity style={styles.boxIcon}>
+      <TouchableOpacity
+        style={styles.boxIcon}
+        onPress={() => navigation.navigate('EditPage')}>
         <Edit size="24" color={colors.black()} />
       </TouchableOpacity>
       <Text style={styles.pBold}>{listProfile.name}</Text>

@@ -6,31 +6,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
-import {
-  ArrowLeft,
-  Like1,
-  Receipt21,
-  Message,
-  Share,
-  More,
-} from 'iconsax-react-native';
+import {ArrowLeft, Share, More} from 'iconsax-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ListChallange} from '../../../data';
 import FastImage from 'react-native-fast-image';
 import {fontType, colors} from '../../theme';
-const formatNumber = number => {
-  if (number >= 1000000000) {
-    return (number / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B';
-  }
-  if (number >= 1000000) {
-    return (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-  }
-  if (number >= 1000) {
-    return (number / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
-  }
-  return number.toString();
-};
-const BlogDetail = ({route}) => {
+const DetailChallange = ({route}) => {
   const {blogId} = route.params;
   const [iconStates, setIconStates] = useState({
     liked: {variant: 'Linear', color: colors.grey(0.6)},
@@ -83,7 +64,7 @@ const BlogDetail = ({route}) => {
     </View>
   );
 };
-export default BlogDetail;
+export default DetailChallange;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -127,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   category: {
-    color: colors.blue(),
+    color: colors.green(),
     fontFamily: fontType['Pjs-SemiBold'],
     fontSize: 12,
   },
@@ -150,3 +131,16 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
+
+const formatNumber = number => {
+  if (number >= 1000000000) {
+    return (number / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B';
+  }
+  if (number >= 1000000) {
+    return (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (number >= 1000) {
+    return (number / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return number.toString();
+};
