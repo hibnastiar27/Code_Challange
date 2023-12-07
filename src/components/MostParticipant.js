@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import {fontType, colors} from '../theme';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
+import {formatDate} from '../utils/formatDate';
 
 const ParticipantTop = ({data}) => {
   const navigation = useNavigation();
@@ -20,23 +22,26 @@ const ParticipantTop = ({data}) => {
         contentContainerStyle={{gap: 16}}>
         <TouchableOpacity
           style={Most.card}
-          onPress={() => navigation.navigate('Details', {blogId: data.id})}>
+          onPress={() => navigation.navigate('Details', {blogId: data?.id})}>
           <View>
-            <Image
+            <FastImage
               style={Most.image}
               source={{
-                // uri: 'https://codedesign.dev/_next/image?url=%2Ftwitter-embed.png&w=1920&q=75',
-                uri: data.image,
+                uri: data?.image,
+                headers: {Authorization: 'someAuthToken'},
+                priority: FastImage.priority.high,
               }}
+              resizeMode={FastImage.resizeMode.cover}
             />
           </View>
 
           <View style={Most.row}>
             <View>
-              <Text style={Most.h2}>{data.title}</Text>
+              <Text style={Most.h2}>{data?.title}</Text>
+              {console.log(data?.id)}
               <View style={Most.row}>
-                <Text style={Most.p}>{data.date}</Text>
-                <Text style={Most.p}>{data.participant} Participant</Text>
+                <Text style={Most.p}>{formatDate(data?.createdAt)}</Text>
+                <Text style={Most.p}>{data?.participant} Participant</Text>
               </View>
             </View>
             <Text style={Most.btn}>View Challange</Text>

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,20 +6,21 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import {ArrowLeft} from 'iconsax-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {fontType, colors} from '../../theme';
 import axios from 'axios';
 
-const EditProfile = ({route}) => {
-  const {blogId} = route.params;
+const EditProfile = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const [blogData, setBlogData] = useState({
     title: '',
     image: '',
     deskripsi: '',
   });
+
   const handleChange = (key, value) => {
     setBlogData({
       ...blogData,
@@ -27,35 +28,12 @@ const EditProfile = ({route}) => {
     });
   };
 
-  const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    getBlogById();
-  }, [blogId]);
-
-  const getBlogById = async () => {
-    try {
-      const response = await axios.get(
-        `https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/${blogId}`,
-      );
-      setBlogData({
-        title: response.data.title,
-        deskripsi: response.data.deskripsi,
-        image: response.data.image,
-      });
-      setImage(response.data.image);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleUpdate = async () => {
+  const handleUpload = async () => {
     setLoading(true);
     try {
       await axios
-        .put(
-          `https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/${blogId}`,
+        .post(
+          'https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/',
           {
             title: blogData.title,
             image: blogData.image,
@@ -79,11 +57,8 @@ const EditProfile = ({route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <ArrowLeft color={colors.black()} variant="Linear" size={24} />
-        </TouchableOpacity>
         <View style={{flex: 1, alignItems: 'center'}}>
-          <Text style={styles.title}>Edit Page</Text>
+          <Text style={styles.title}>Add Page</Text>
         </View>
       </View>
       <ScrollView
@@ -96,7 +71,6 @@ const EditProfile = ({route}) => {
         <View style={textInput.border}>
           <TextInput
             placeholder="Type your title"
-            value={blogData.title}
             onChangeText={text => handleChange('title', text)}
             placeholderTextColor={colors.grey(0.6)}
             multiline
@@ -107,19 +81,16 @@ const EditProfile = ({route}) => {
         <View style={textInput.border}>
           <TextInput
             placeholder="Type your link image"
-            value={blogData.image}
             onChangeText={text => handleChange('image', text)}
             placeholderTextColor={colors.grey(0.6)}
             multiline
             style={textInput.title}
           />
-          {console.log(blogData)}
         </View>
         <Text style={styles.title}>Deskripsi</Text>
         <View style={[textInput.border, {minHeight: 250}]}>
           <TextInput
             placeholder="Type your deskripsi"
-            value={blogData.deskripsi}
             onChangeText={text => handleChange('deskripsi', text)}
             placeholderTextColor={colors.grey(0.6)}
             multiline
@@ -128,10 +99,15 @@ const EditProfile = ({route}) => {
         </View>
       </ScrollView>
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-          <Text style={styles.buttonLabel}>Update</Text>
+        <TouchableOpacity style={styles.button} onPress={handleUpload}>
+          <Text style={styles.buttonLabel}>Tambah Data</Text>
         </TouchableOpacity>
       </View>
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={colors.green()} />
+        </View>
+      )}
     </View>
   );
 };
@@ -139,6 +115,16 @@ const EditProfile = ({route}) => {
 export default EditProfile;
 
 const styles = StyleSheet.create({
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.black(0.2),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: colors.white(),

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 
 import {
@@ -18,6 +19,8 @@ import {
 } from '../../components';
 import {ListChallange, levelList} from '../../../data';
 import {fontType, colors} from '../../../src/theme';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import axios from 'axios';
 
 export default function Beranda() {
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -27,6 +30,38 @@ export default function Beranda() {
     outputRange: [0, -142],
     extrapolate: 'clamp',
   });
+
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
+  const [blogData, setBlogData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getDataBlog = async () => {
+    try {
+      const response = await axios.get(
+        'https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/',
+      );
+      setBlogData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      getDataBlog();
+      setRefreshing(false);
+    }, 1500);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getDataBlog();
+    }, []),
+  );
+
   return (
     <View style={styles.container}>
       <Animated.View
@@ -48,11 +83,20 @@ export default function Beranda() {
         )}
         contentContainerStyle={{paddingTop: 142}}>
         <Text style={styles.h1}>Most Participant</Text>
-        <MostParticipant />
-        {/* <ListChallange /> */}
+        <View style={{paddingVertical: 10, gap: 10}}>
+          {/* <TopParticipant data={ListChallange[0]} /> */}
+          {loading ? (
+            <ActivityIndicator size={'large'} color={colors.blue()} />
+          ) : blogData.length > 0 ? (
+            <TopParticipant data={blogData[blogData.length - 1]} />
+          ) : (
+            <TopParticipant data={blogData[0]} />
+          )}
+          {console.log(blogData[blogData.length - 1])}
+        </View>
+        {/* <MostParticipant /> */}
         <ListVertical />
       </Animated.ScrollView>
-      {/* <Navbar /> */}
     </View>
   );
 }
@@ -168,49 +212,49 @@ const category = StyleSheet.create({
   },
 });
 
-const List = StyleSheet.create({
-  container: {
-    flex: 2,
-    marginHorizontal: 24,
-    marginVertical: 10,
-    borderBottomColor: '#ABFFCD',
-  },
-  h1: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    fontFamily: fontType['Pjs-Bold'],
-    color: colors.black(),
-  },
-  h2: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: fontType['Pjs-Bold'],
-    color: colors.black(),
-    textAlign: 'left',
-  },
-  p: {
-    fontSize: 12,
-    fontFamily: fontType['Pjs-Bold'],
-    color: colors.black(0.5),
-    textAlign: 'left',
-    marginRight: 10,
-  },
-  card: {
-    width: 340 / 2,
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#FAFFFC',
-    borderRadius: 10,
-  },
-  image: {
-    width: 300 / 2,
-    height: 172.66,
-    borderRadius: 10,
-    resizeMode: 'cover',
-    marginBottom: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-});
+// const List = StyleSheet.create({
+//   container: {
+//     flex: 2,
+//     marginHorizontal: 24,
+//     marginVertical: 10,
+//     borderBottomColor: '#ABFFCD',
+//   },
+//   h1: {
+//     fontWeight: 'bold',
+//     fontSize: 16,
+//     fontFamily: fontType['Pjs-Bold'],
+//     color: colors.black(),
+//   },
+//   h2: {
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     fontFamily: fontType['Pjs-Bold'],
+//     color: colors.black(),
+//     textAlign: 'left',
+//   },
+//   p: {
+//     fontSize: 12,
+//     fontFamily: fontType['Pjs-Bold'],
+//     color: colors.black(0.5),
+//     textAlign: 'left',
+//     marginRight: 10,
+//   },
+//   card: {
+//     width: 340 / 2,
+//     marginTop: 20,
+//     padding: 10,
+//     backgroundColor: '#FAFFFC',
+//     borderRadius: 10,
+//   },
+//   image: {
+//     width: 300 / 2,
+//     height: 172.66,
+//     borderRadius: 10,
+//     resizeMode: 'cover',
+//     marginBottom: 10,
+//   },
+//   row: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//   },
+// });

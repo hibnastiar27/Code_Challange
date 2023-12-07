@@ -1,7 +1,15 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Beranda, History, Profile, Details, Search, EditPage} from '../screen';
+import {
+  Beranda,
+  History,
+  Profile,
+  Details,
+  Search,
+  EditPage,
+  AddPage,
+} from '../screen';
 import {
   Home,
   Activity,
@@ -54,6 +62,21 @@ function MainApp() {
           tabBarLabel: 'History',
           tabBarIcon: ({focused, color}) => (
             <Activity
+              color={color}
+              variant={focused ? 'Bold' : 'Linear'}
+              size={24}
+            />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="AddPage"
+        component={AddPage}
+        options={{
+          tabBarLabel: 'Add',
+          tabBarIcon: ({focused, color}) => (
+            <AddSquare
               color={color}
               variant={focused ? 'Bold' : 'Linear'}
               size={24}

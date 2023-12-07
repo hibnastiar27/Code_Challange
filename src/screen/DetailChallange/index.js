@@ -5,34 +5,86 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {ArrowLeft, Share, More} from 'iconsax-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ListChallange} from '../../../data';
 import FastImage from 'react-native-fast-image';
 import {fontType, colors} from '../../theme';
+import axios from 'axios';
+import ActionSheet from 'react-native-actions-sheet';
+import {formatDate} from '../../utils/formatDate';
+
 const DetailChallange = ({route}) => {
   const {blogId} = route.params;
   const [iconStates, setIconStates] = useState({
     liked: {variant: 'Linear', color: colors.grey(0.6)},
     bookmarked: {variant: 'Linear', color: colors.grey(0.6)},
   });
-  const selectedBlog = ListChallange.find(x => x.id === blogId);
   const navigation = useNavigation();
+
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const actionSheetRef = useRef(null);
+
+  const openActionSheet = () => {
+    actionSheetRef.current?.show();
+  };
+
+  const closeActionSheet = () => {
+    actionSheetRef.current?.hide();
+  };
+
+  useEffect(() => {
+    getBlogById();
+  }, [blogId]);
+
+  const getBlogById = async () => {
+    try {
+      const response = await axios.get(
+        `https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/${blogId}`,
+      );
+      setSelectedBlog(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const navigateEdit = () => {
+    closeActionSheet();
+    navigation.navigate('EditPage', {blogId});
+  };
+  const handleDelete = async () => {
+    await axios
+      .delete(
+        `https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/${blogId}`,
+      )
+      .then(() => {
+        closeActionSheet();
+        navigation.navigate('Beranda');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <ArrowLeft color={colors.grey(0.6)} variant="Linear" size={24} />
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', justifyContent: 'center', gap: 20}}>
-          <Share color={colors.grey(0.6)} variant="Linear" size={24} />
+        <TouchableOpacity
+          onPress={openActionSheet}
+          style={{flexDirection: 'row', justifyContent: 'center', gap: 20}}>
           <More
             color={colors.grey(0.6)}
             variant="Linear"
             style={{transform: [{rotate: '90deg'}]}}
           />
-        </View>
+        </TouchableOpacity>
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -44,7 +96,7 @@ const DetailChallange = ({route}) => {
         <FastImage
           style={styles.image}
           source={{
-            uri: selectedBlog.image,
+            uri: selectedBlog?.image,
             headers: {Authorization: 'someAuthToken'},
             priority: FastImage.priority.high,
           }}
@@ -55,12 +107,72 @@ const DetailChallange = ({route}) => {
             justifyContent: 'space-between',
             marginTop: 15,
           }}>
-          <Text style={styles.category}>{selectedBlog.status}</Text>
-          <Text style={styles.date}>{selectedBlog.date}</Text>
+          <Text style={styles.category}>{selectedBlog?.status}</Text>
+          <Text style={styles.date}>{formatDate(selectedBlog?.createdAt)}</Text>
         </View>
-        <Text style={styles.title}>{selectedBlog.title}</Text>
-        <Text style={styles.content}>{selectedBlog.deskripsi}</Text>
+        <Text style={styles.title}>{selectedBlog?.title}</Text>
+        <Text style={styles.content}>{selectedBlog?.deskripsi}</Text>
       </ScrollView>
+      <ActionSheet
+        ref={actionSheetRef}
+        containerStyle={{
+          borderTopLeftRadius: 25,
+          borderTopRightRadius: 25,
+        }}
+        indicatorStyle={{
+          width: 100,
+        }}
+        gestureEnabled={true}
+        defaultOverlayOpacity={0.3}>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={navigateEdit}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: colors.black(),
+              fontSize: 18,
+            }}>
+            Edit
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={handleDelete}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: colors.black(),
+              fontSize: 18,
+            }}>
+            Delete
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: 15,
+          }}
+          onPress={closeActionSheet}>
+          <Text
+            style={{
+              fontFamily: fontType['Pjs-Medium'],
+              color: 'red',
+              fontSize: 18,
+            }}>
+            Cancel
+          </Text>
+        </TouchableOpacity>
+      </ActionSheet>
     </View>
   );
 };
