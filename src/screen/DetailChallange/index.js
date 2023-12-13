@@ -11,63 +11,72 @@ import {useNavigation} from '@react-navigation/native';
 import {ListChallange} from '../../../data';
 import FastImage from 'react-native-fast-image';
 import {fontType, colors} from '../../theme';
-import axios from 'axios';
+// import axios from 'axios';
 import ActionSheet from 'react-native-actions-sheet';
 import {formatDate} from '../../utils/formatDate';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 const DetailChallange = ({route}) => {
   const {blogId} = route.params;
+  const navigation = useNavigation();
   const [iconStates, setIconStates] = useState({
     liked: {variant: 'Linear', color: colors.grey(0.6)},
     bookmarked: {variant: 'Linear', color: colors.grey(0.6)},
   });
-  const navigation = useNavigation();
-
-  const [selectedBlog, setSelectedBlog] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [selectedBlog, setSelectedBlog] = useState(null);
   const actionSheetRef = useRef(null);
-
   const openActionSheet = () => {
     actionSheetRef.current?.show();
   };
-
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
   };
 
   useEffect(() => {
-    getBlogById();
+    const subscriber = firestore()
+      .collection('blog')
+      .doc(blogId)
+      .onSnapshot(documentSnapshot => {
+        const blogData = documentSnapshot.data();
+        if (blogData) {
+          console.log('Blog data: ', blogData);
+          setSelectedBlog(blogData);
+        } else {
+          console.log(`Blog with ID ${blogId} not found.`);
+        }
+      });
+    setLoading(false);
+    return () => subscriber();
   }, [blogId]);
-
-  const getBlogById = async () => {
-    try {
-      const response = await axios.get(
-        `https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/${blogId}`,
-      );
-      setSelectedBlog(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const navigateEdit = () => {
     closeActionSheet();
     navigation.navigate('EditPage', {blogId});
   };
   const handleDelete = async () => {
-    await axios
-      .delete(
-        `https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/${blogId}`,
-      )
-      .then(() => {
-        closeActionSheet();
-        navigation.navigate('Beranda');
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    setLoading(true);
+    try {
+      await firestore()
+        .collection('blog')
+        .doc(blogId)
+        .delete()
+        .then(() => {
+          console.log('Blog deleted!');
+        });
+      if (selectedBlog?.image) {
+        const imageRef = storage().refFromURL(selectedBlog?.image);
+        await imageRef.delete();
+      }
+      console.log('Blog deleted!');
+      closeActionSheet();
+      setSelectedBlog(null);
+      setLoading(false);
+      navigation.navigate('Beranda');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -243,16 +252,3 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
-
-const formatNumber = number => {
-  if (number >= 1000000000) {
-    return (number / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B';
-  }
-  if (number >= 1000000) {
-    return (number / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-  }
-  if (number >= 1000) {
-    return (number / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
-  }
-  return number.toString();
-};

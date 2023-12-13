@@ -8,11 +8,30 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {fontType, colors} from '../../theme';
-import axios from 'axios';
+import {ArrowLeft, AddSquare, Add} from 'iconsax-react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 
 const EditProfile = () => {
+  const handleImagePick = async () => {
+    ImagePicker.openPicker({
+      width: 1920,
+      height: 1080,
+      cropping: true,
+    })
+      .then(image => {
+        console.log(image);
+        setImage(image.path);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [blogData, setBlogData] = useState({
@@ -29,30 +48,31 @@ const EditProfile = () => {
   };
 
   const handleUpload = async () => {
+    let filename = image.substring(image.lastIndexOf('/') + 1);
+    const extension = filename.split('.').pop();
+    const name = filename.split('.').slice(0, -1).join('.');
+    filename = name + Date.now() + '.' + extension;
+    const reference = storage().ref(`blogimages/${filename}`);
+
     setLoading(true);
     try {
-      await axios
-        .post(
-          'https://656e83defc2ddab8389aa32f.mockapi.io/codechallange/artikel/',
-          {
-            title: blogData.title,
-            image: blogData.image,
-            deskripsi: blogData.deskripsi,
-            createdAt: new Date(),
-          },
-        )
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      await reference.putFile(image);
+      const url = await reference.getDownloadURL();
+      await firestore().collection('blog').add({
+        title: blogData.title,
+        image: url,
+        deskripsi: blogData.deskripsi,
+        createdAt: new Date(),
+      });
       setLoading(false);
+      console.log('Blog added!');
       navigation.navigate('Beranda');
     } catch (e) {
       console.log(e);
     }
   };
+
+  const [image, setImage] = useState(null);
 
   return (
     <View style={styles.container}>
@@ -78,15 +98,59 @@ const EditProfile = () => {
           />
         </View>
         <Text style={styles.title}>Image</Text>
-        <View style={textInput.border}>
-          <TextInput
-            placeholder="Type your link image"
-            onChangeText={text => handleChange('image', text)}
-            placeholderTextColor={colors.grey(0.6)}
-            multiline
-            style={textInput.title}
-          />
-        </View>
+
+        {image ? (
+          <View style={{position: 'relative'}}>
+            <FastImage
+              style={{width: '100%', height: 127, borderRadius: 5}}
+              source={{
+                uri: image,
+                headers: {Authorization: 'someAuthToken'},
+                priority: FastImage.priority.high,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                top: -5,
+                right: -5,
+                backgroundColor: colors.green(),
+                borderRadius: 25,
+              }}
+              onPress={() => setImage(null)}>
+              <Add
+                size={20}
+                variant="Linear"
+                color={colors.white()}
+                style={{transform: [{rotate: '45deg'}]}}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity onPress={handleImagePick}>
+            <View
+              style={[
+                textInput.borderDashed,
+                {
+                  gap: 10,
+                  paddingVertical: 30,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
+              ]}>
+              <AddSquare color={colors.grey(0.6)} variant="Linear" size={42} />
+              <Text
+                style={{
+                  fontFamily: fontType['Pjs-Regular'],
+                  fontSize: 12,
+                  color: colors.grey(0.6),
+                }}>
+                Upload Thumbnail
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
         <Text style={styles.title}>Deskripsi</Text>
         <View style={[textInput.border, {minHeight: 250}]}>
           <TextInput
@@ -171,6 +235,13 @@ const styles = StyleSheet.create({
   },
 });
 const textInput = StyleSheet.create({
+  borderDashed: {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    borderColor: colors.grey(0.4),
+  },
   border: {
     borderStyle: 'solid',
     borderWidth: 1,

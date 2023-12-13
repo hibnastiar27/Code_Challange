@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "48144588425",
+    "project_id": "codechallange-ee691",
+    "storage_bucket": "codechallange-ee691.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48144588425:android:3b32c0d8cc0a3a1099f058",
+        "android_client_info": {
+          "package_name": "com.code_challange"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtVhccFvPpb9CDaXnWXJFCaszryZXvMwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
