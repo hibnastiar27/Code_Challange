@@ -21,15 +21,21 @@ import {
 import {ListChallange, levelList} from '../../../data';
 import {fontType, colors} from '../../../src/theme';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
-// import axios from 'axios';
 import firestore from '@react-native-firebase/firestore';
-import {cleanSingle} from 'react-native-image-crop-picker';
 
 export default function Beranda() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [blogData, setBlogData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const diffClampY = Animated.diffClamp(scrollY, 0, 142);
+  const recentY = diffClampY.interpolate({
+    inputRange: [0, 142],
+    outputRange: [0, -142],
+    extrapolate: 'clamp',
+  });
 
   useEffect(() => {
     const subscriber = firestore()
@@ -47,14 +53,6 @@ export default function Beranda() {
       });
     return () => subscriber();
   }, []);
-
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const diffClampY = Animated.diffClamp(scrollY, 0, 142);
-  const recentY = diffClampY.interpolate({
-    inputRange: [0, 142],
-    outputRange: [0, -142],
-    extrapolate: 'clamp',
-  });
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -100,16 +98,19 @@ export default function Beranda() {
         }>
         <Text style={styles.h1}>Most Participant</Text>
         <View style={{paddingVertical: 10, gap: 10}}>
-          {/* <TopParticipant data={ListChallange[0]} /> */}
           {loading ? (
-            <ActivityIndicator size={'large'} color={colors.blue()} />
+            <ActivityIndicator
+              style={styles.loading}
+              size={'large'}
+              color={colors.green()}
+            />
           ) : (
-            <TopParticipant data={blogData[0]} />
+            blogData.map((item, index) => (
+              <TopParticipant data={item} key={index} />
+            ))
           )}
-          {/* {console.log(blogData[blogData.length - 1])} */}
-          {console.log(blogData[0])}
+          {console.log(blogData)}
         </View>
-        {/* <MostParticipant /> */}
         <ListVertical />
       </Animated.ScrollView>
     </View>
@@ -174,10 +175,13 @@ const MostParticipant = () => {
 };
 
 const styles = StyleSheet.create({
+  loading: {
+    marginTop: 20,
+  },
   container2: {
     position: 'absolute',
     backgroundColor: colors.white(),
-    zIndex: 999,
+    zIndex: 1,
     left: 0,
     right: 0,
     elevation: 1000,

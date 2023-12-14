@@ -4,6 +4,7 @@ const colors = {
   white: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   black: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   green: (opacity = 1) => `rgba(88, 255, 155, ${opacity})`,
+  red: (opacity = 1) => `rgba(200, 10, 10, ${opacity})`,
   darkModeBlack: (opacity = 1) => `rgba(27, 27, 27, ${opacity})`,
   darkModeBlue: (opacity = 1) => `rgba(146, 156, 241, ${opacity})`,
 };
